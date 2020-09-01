@@ -63,6 +63,19 @@ class FillablePDF
   end
 
   ##
+  # Retrieves the coordinates of a field given its unique field name.
+  #
+  #   @param [String|Symbol] key the field name
+  #
+  #   @return the array of the field tops positions
+  #
+  def field_coordinates(key)
+    pdf_field(key).getWidgets().get(0).getRectangle().toLongArray()
+  rescue NoMethodError
+    raise "unknown key name `#{key}'"
+  end
+
+  ##
   # Retrieves the numeric type of a field given its unique field name.
   #
   #   @param [String|Symbol] key the field name
