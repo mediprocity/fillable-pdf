@@ -67,10 +67,24 @@ class FillablePDF
   #
   #   @param [String|Symbol] key the field name
   #
-  #   @return the array of the field tops positions
+  #   @return the array of the field position
   #
   def field_coordinates(key)
     pdf_field(key).getWidgets().get(0).getRectangle().toLongArray()
+  rescue NoMethodError
+    raise "unknown key name `#{key}'"
+  end
+
+  ##
+  # Retrieves the page number of a field given its unique field name.
+  #
+  #   @param [String|Symbol] key the field name
+  #
+  #   @return the number of the page
+  #
+  def field_page(key)
+    page = pdf_field(key).getWidgets().get(0).getPage()
+    @pdf_doc.getPageNumber(page)
   rescue NoMethodError
     raise "unknown key name `#{key}'"
   end
@@ -109,6 +123,8 @@ class FillablePDF
   #
   def set_field(key, value)
     pdf_field(key).setValue(value.to_s)
+  rescue StandardError => e
+    puts "Error: #{e}"
   end
 
   ##
